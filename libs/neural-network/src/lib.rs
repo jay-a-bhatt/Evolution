@@ -21,12 +21,14 @@ pub struct Network {
 }
 
 impl Network {
-    pub fn propagate(&self, mut inputs: Vec<f32>) -> Vec<f32> {
-        for layer in &self.layers {
-            inputs = layer.propagate(inputs);
-        }
-
-        return inputs
+    pub fn propagate(&self, inputs: Vec<f32>) -> Vec<f32> {
+        self.layers
+            .iter()
+            .fold(inputs, |inputs, layer| layer.propagate(inputs))
+        // Above is the same as
+        // for layer in &self.layers {
+        //     inputs = layer.propagate(inputs);
+        // }
     }
 }
 
