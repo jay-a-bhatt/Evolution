@@ -32,6 +32,38 @@ impl Network {
         //     inputs = layer.propagate(inputs);
         // }
     }
+
+    pub fn new(layers: Vec<Layer>) -> Self {
+        return Self{ layers }
+    }
+
+    // Randomize network by taking the # of layers,
+    // and the # of neurons per layer
+    pub fn random(layers: Vec<LayerTopology>) -> Self {
+        // Check if there is > 1 layer
+        assert_eq!(layers.len() > 1);
+
+        for adjacent_layers in layers.windows(2) { // .windows allows us to iterate by adjacent items
+            let input_size = adjacent_layers[0].neurons;
+            let output_size = adjacent_layers[1].neurons;
+        }
+
+        // Above is the same as
+        // let mut built_layers = Vec::new();
+        // for i in 0..(layers.len() - 1) {
+        //     let input_size = layers[i].neurons;
+        //     let output_size = layers[i + 1].neurons;
+
+        // built_layers.push(Layer::random(
+        //     input_size,
+        //     output_size,
+        // ))
+        }
+}
+
+#[derive(Debug)]
+pub struct LayerTopology {
+    pub neurons: usize,
 }
 
 #[derive(Debug)]
@@ -64,6 +96,10 @@ struct Neuron {
 impl Neuron {
     fn propagate(&self, inputs: &[f32]) -> f32 {
         assert_eq!(inputs.len(), self.weights.len());
+        // Usually catching and handling the error would be better, but:
+        // 1. If the assertion fails, the implementation is wrong and the 
+        //    end user can't do anything on their side
+        // 2. Just a little project and not in prod., so no need to waste time
         let output = inputs
             .iter()
             .zip(&self.weights)
