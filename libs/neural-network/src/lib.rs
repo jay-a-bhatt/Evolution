@@ -15,7 +15,7 @@ mod tests {
 
 // Everything above was default example code
 
-// TODO - Coding: new() section in https://pwy.io/posts/learning-to-fly-pt2/
+// TODO - it's crates.io time! section in https://pwy.io/posts/learning-to-fly-pt2/
 
 #[derive(Debug)]
 pub struct Network {
@@ -33,20 +33,17 @@ impl Network {
         // }
     }
 
-    pub fn new(layers: Vec<Layer>) -> Self {
-        return Self{ layers }
-    }
-
     // Randomize network by taking the # of layers,
     // and the # of neurons per layer
-    pub fn random(layers: Vec<LayerTopology>) -> Self {
+    pub fn random(layers: &[LayerTopology]) -> Self {
         // Check if there is > 1 layer
         assert_eq!(layers.len() > 1);
 
-        for adjacent_layers in layers.windows(2) { // .windows allows us to iterate by adjacent items
-            let input_size = adjacent_layers[0].neurons;
-            let output_size = adjacent_layers[1].neurons;
-        }
+        let layers = layers
+            .windows(2)
+            .map(|layers| Layer::random(layers[0].neurons, layers[1].neurons))
+            .collect();
+        return Self { layers }
 
         // Above is the same as
         // let mut built_layers = Vec::new();
@@ -85,6 +82,14 @@ impl Layer {
         // }
         // return outputs
     }
+
+    fn random(input_size: usize, output_size: usize) -> Self {
+        let neurons = (0..output_size)
+            .map(|_| Neuron::random(input_size))
+            .collect();
+
+        return Self { neurons }
+    }
 }
 
 #[derive(Debug)]
@@ -120,5 +125,15 @@ impl Neuron {
         // } else {
         //     0.0
         // }
+    }
+
+    fn random(input_size: usize) -> Self {
+        let bias = todo!();
+
+        let weights = (0..input_size)
+            .map(|_| todo!())
+            .collect();
+
+        return Self { bias, weights }
     }
 }
